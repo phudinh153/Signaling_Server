@@ -13,12 +13,14 @@ def join(message):
     join_room(room)
     print('RoomEvent: {} has joined the room {}\n'.format(username, room))
     emit('ready', {username: username}, to=room, skip_sid=request.sid)
-    print('Emitted ready event to room {} with data: {}'.format(room, {username: username}))
+    print('Emitted ready event to room {} with data: {}'.format(room, {'username': username}))
 
 @socketio.on('ack')
 def handle_ack(data):
     print('Event acknowledged:', data)
+    join_room(data['room'])
     emit('ack', data, to=request.sid)
+    print('Emitted ready event to room {} with data: {}'.format(data['room'], {'username': data['username']}))
 
 @socketio.on('data')
 def transfer_data(message):
