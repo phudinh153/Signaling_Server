@@ -19,8 +19,8 @@ def join(message):
 def handle_ack(data):
     print('Event acknowledged:', data)
     join_room(data['room'])
-    emit('ack', data, to=request.sid)
     print('Emitted ready event to room {} with data: {}'.format(data['room'], {'username': data['username']}))
+    emit('ack', data, to=request.sid)
 
 @socketio.on('data')
 def transfer_data(message):
