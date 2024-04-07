@@ -20,7 +20,7 @@ def handle_ack(data):
     print('Event acknowledged:', data)
     join_room(data['room'])
     print('Emitted ready event to room {} with data: {}'.format(data['room'], {'username': data['username']}))
-    emit('ack', data, to=request.sid)
+    emit('ack', data, to=data['room'])
 
 @socketio.on('data')
 def transfer_data(message):
@@ -30,6 +30,21 @@ def transfer_data(message):
     print('DataEvent: {} has sent the data:\n {}\n'.format(username, data))
     emit('data', data, to=room, skip_sid=request.sid)
 
+@socketio.on('offer')
+def offer(data):
+    print('OfferEvent:', data)
+    username = data['username']
+    room = data['room']
+    emit('offer', data, to=room, skip_sid=request.sid)
+    print('Emitted offer event to room {} with data: {}'.format(room, data))
+
+@socketio.on('answer')
+def answer(data):
+    print('AnswerEvent:', data)
+    username = data['username']
+    room = data['room']
+    emit('answer', data, to=room, skip_sid=request.sid)
+    print('Emitted answer event to room {} with data: {}'.format(room, data))
 
 @socketio.on_error_default
 def default_error_handler(e):
