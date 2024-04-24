@@ -1,3 +1,4 @@
+import re
 from flask import Flask, request
 from flask_socketio import SocketIO, emit, join_room
 
@@ -45,6 +46,10 @@ def answer(data):
     room = data['room']
     emit('answer', data, to=room, skip_sid=request.sid)
     print('Emitted answer event to room {} with data: {}'.format(room, data))
+
+@app.route('/')
+def index():
+    return 'ok', 200
 
 @socketio.on_error_default
 def default_error_handler(e):
